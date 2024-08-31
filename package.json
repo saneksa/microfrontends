@@ -1,0 +1,19 @@
+{
+  "name": "test_micromodules",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "serve": "lerna run serve",
+    "build:prod": "lerna run build:prod"
+  },
+  "devDependencies": {
+    "@types/webpack-env": "^1.18.5",
+    "lerna": "^8.1.8",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
