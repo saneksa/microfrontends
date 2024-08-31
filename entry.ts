@@ -13,6 +13,7 @@ function loadComponent(url: string, scope: string, module: string) {
     const script = document.createElement("script");
 
     script.async = true;
+    script.type = "text/javascript";
     script.src = url;
 
     script.onload = async () => {
@@ -22,16 +23,16 @@ function loadComponent(url: string, scope: string, module: string) {
       const factory = await window[scope].get(module);
       const Module = factory();
 
-      document.body.removeChild(script);
+      script.parentElement?.removeChild(script);
       resolve(Module);
     };
 
     script.onerror = (e) => {
-      document.body.removeChild(script);
+      script.parentElement?.removeChild(script);
       reject(e);
     };
 
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   });
 }
 
