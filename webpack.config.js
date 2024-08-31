@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -17,10 +18,18 @@ const config = {
   devServer: {
     open: false,
     host: "localhost",
+    port: 5555,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "assets", "index.html"),
+    }),
+    new ModuleFederationPlugin({
+      name: "hostApp",
+      filename: "remoteEntry.js",
+      remotes: {},
+      exposes: {},
+      shared: {},
     }),
   ],
   module: {
@@ -43,6 +52,7 @@ const config = {
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
   },
+  devtool: "cheap-module-source-map",
 };
 
 module.exports = () => {

@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
+    "start": "webpack serve",
     "serve": "lerna run serve",
     "build:prod": "lerna run build:prod"
   },

@@ -1,5 +1,6 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -18,7 +19,16 @@ const config = {
     host: "localhost",
     port: "3003",
   },
-  plugins: [],
+  plugins: [
+    new ModuleFederationPlugin({
+      name: "cApp",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./c": "./src/index.module.ts",
+      },
+      shared: {},
+    }),
+  ],
   module: {
     rules: [
       {
