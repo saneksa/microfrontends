@@ -1,10 +1,9 @@
-// function importAll(ctx: __WebpackModuleApi.RequireContext) {
-//   ctx.keys().forEach(ctx);
-// }
+/// <reference types="webpack/module" />
 
-// const context = require.context("./packages", true, /index.module\.[j,t]sx?$/);
-
-// importAll(context);
+interface Container {
+  init(shareScope: any): void;
+  get(module: string): Promise<() => any>;
+}
 
 function loadComponent(url: string, scope: string, module: string) {
   return new Promise(async (resolve, reject) => {
@@ -17,10 +16,12 @@ function loadComponent(url: string, scope: string, module: string) {
     script.src = url;
 
     script.onload = async () => {
-      const container = window[scope]; // or get the container somewhere else
-      // @ts-expect-error
-      await container.init(__webpack_share_scopes__.default);
-      const factory = await window[scope].get(module);
+      const container = window[scope] as Container | undefined;
+      if (!container) return;
+
+      container.init(__webpack_share_scopes__.default);
+
+      const factory = await container.get(module);
       const Module = factory();
 
       script.parentElement?.removeChild(script);
@@ -58,4 +59,6 @@ function loadComponent(url: string, scope: string, module: string) {
   const modules = await Promise.all(
     remotes.map(({ url, scope, module }) => loadComponent(url, scope, module))
   );
+
+  console.warn(modules);
 })();

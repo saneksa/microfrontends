@@ -18,6 +18,7 @@ const config = {
     open: false,
     host: "localhost",
     port: "3003",
+    hot: true,
   },
   plugins: [
     new ModuleFederationPlugin({
